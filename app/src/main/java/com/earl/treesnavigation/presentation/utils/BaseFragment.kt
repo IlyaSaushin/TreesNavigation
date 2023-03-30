@@ -86,6 +86,7 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
 
     private fun moveBackFromFragment(currentNode: String) {
         val parent = viewModel.childs.value.find { it.name == currentNode }?.parent
+        if (parent == Nodes.root) parentFragmentManager.clearBackStack("")
         if (parent != null) {
             lifecycleScope.launch(Dispatchers.Main) {
                 delay(300)
@@ -115,9 +116,10 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         parentFragmentManager.findFragmentByTag(name) ?: ChildNodeFragment.newInstance(name, needToShowChildName)
 
     protected fun addChildNode(parent: String) {
+        val level = viewModel.childs.value.find { it.name == parent }?.level ?: 0
         val newNode = ChildNode(
             name = "",
-            level = parentFragmentManager.backStackEntryCount,
+            level = level + 1,
             parent = parent,
             childsNames = mutableListOf(),
             color = generateRandomColor()
