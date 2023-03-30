@@ -8,7 +8,8 @@ data class ChildNode(
     val level: Int,
     val parent: String,
     val childsNames: MutableList<String>,
-    val color: Int
+    val color: Int,
+    var isExpanded: Boolean = false
 ) : Same<ChildNode> {
     override fun same(value: ChildNode) = value == this
 

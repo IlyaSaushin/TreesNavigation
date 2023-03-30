@@ -25,15 +25,15 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val nodeName = getNodeName()
-        initRecyclerAdapter()
-        binding.numberInBackstack.text = (parentFragmentManager.backStackEntryCount - 1).toString()
+        initRecyclerAdapter(nodeName)
+        binding.numberInBackstack.text = String.format(requireContext().getString(R.string.level_s), viewModel.childs.value.find { it.name == nodeName }?.level)
         binding.nodeName.text = String.format(requireContext().getString(R.string.child_name), nodeName)
         binding.rootLayout.setBackgroundColor(viewModel.childs.value.find { it.name == nodeName }?.color!!)
         binding.addChild.setOnClickListener {
-            addChild(nodeName)
+            addChildNode(nodeName)
         }
         binding.returnToRootBtn.setOnClickListener {
-            navigate(Nodes.root, nodeName)
+            popBackstack(nodeName)
         }
     }
 
@@ -42,14 +42,14 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
         if (getNodeName() != getNeedToShowFragmentName()) {
             navigate(getNeedToShowFragmentName(), getNodeName())
         }
+        updateCurrentNodeParent(getNodeName())
     }
 
-    private fun initRecyclerAdapter() {
+    private fun initRecyclerAdapter(nodeName: String) {
         val adapter = ChildsRecyclerViewAdapter(this)
         binding.childsRecycler.adapter = adapter
         viewModel.childs.onEach { list ->
-//            adapter.submitList(list.filter { it.parent == nodeName })
-            adapter.submitList(list)
+            adapter.submitList(list.filter { it.parent == nodeName })
         }.launchIn(lifecycleScope)
     }
 
@@ -59,6 +59,17 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
 
     override fun onChildRemoveClick(childName: ChildNode) {
         viewModel.removeChild(childName)
+    }
+
+    override fun onShowChildsBtnClick(childNode: ChildNode, newList: (List<ChildNode>) -> Unit) {
+        val list = viewModel.childs.value.filter { it.parent == childNode.name }
+        newList(list)
+    }
+
+    override fun onHideChildsBtnClick(childNode: ChildNode, list: (List<ChildNode>) -> Unit) {
+        viewModel.findAllChildsOfNode(childNode) { readyList ->
+            list(readyList)
+        }
     }
 
     private fun getNodeName() = arguments?.getString(Nodes.nodeName) ?: ""

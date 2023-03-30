@@ -28,7 +28,7 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
         viewModel.fetchAllNodesFromDb()
         initRecyclerAdapter()
         binding.addChild.setOnClickListener {
-            addChild(Nodes.root)
+            addChildNode(Nodes.root)
         }
     }
 
@@ -36,20 +36,28 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
         val adapter = ChildsRecyclerViewAdapter(this)
         binding.childsRecycler.adapter = adapter
         viewModel.childs.onEach { list ->
-//            adapter.submitList(list.filter { it.parent == Nodes.root })
-            adapter.submitList(list)
+            adapter.submitList(list.filter { it.parent == Nodes.root })
         }.launchIn(lifecycleScope)
     }
 
     override fun onChildNavigateClick(childNode: ChildNode) {
-        navigate(childNode.name, getNodeName())
+        navigate(childNode.name, Nodes.root)
     }
 
     override fun onChildRemoveClick(childName: ChildNode) {
         viewModel.removeChild(childName)
     }
 
-    private fun getNodeName() = arguments?.getString(Nodes.nodeName) ?: ""
+    override fun onShowChildsBtnClick(childNode: ChildNode, newList: (List<ChildNode>) -> Unit) {
+        val list = viewModel.childs.value.filter { it.parent == childNode.name }
+        newList(list)
+    }
+
+    override fun onHideChildsBtnClick(childNode: ChildNode, list: (List<ChildNode>) -> Unit) {
+        viewModel.findAllChildsOfNode(childNode) { readyList ->
+            list(readyList)
+        }
+    }
 
     companion object {
         fun newInstance(name: String) = RootNodeFragment().apply {
