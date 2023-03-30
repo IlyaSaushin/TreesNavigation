@@ -45,8 +45,9 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         val needToShow = viewModel.childs.value.find { it.name == needToShowChildName }
         if (needToShow?.parent == currentFragment) {
             lifecycleScope.launch(Dispatchers.Main) {
-                delay(500)
+                delay(300)
                 parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in, R.anim.slide_down)
                     .replace(
                         R.id.root_container,
                         getFragmentState(needToShowChildName, needToShowChildName)
@@ -62,11 +63,11 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
                 val parent = viewModel.childs.value.filter { it.level == i }
                     .find { it.childsNames.contains(parentOfParent) }
                 parentOfParent = parent?.name!!
-                Log.d("tag", "navigate: ${viewModel.childs.value} ")
             }
             lifecycleScope.launch(Dispatchers.Main) {
-                delay(500)
+                delay(300)
                 parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in, R.anim.slide_down)
                     .replace(
                         R.id.root_container,
                         getFragmentState(parentOfParent, needToShowChildName)
@@ -79,38 +80,6 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
 
     protected fun returnToRoot(currentFragment: String) {
         val currentNodeLevel = viewModel.childs.value.find { it.name == currentFragment }?.level
-//        val needToShow = viewModel.childs.value.find { it.name == needToShowChildName }
-//        if (needToShow?.parent == currentFragment) {
-//            lifecycleScope.launch(Dispatchers.Main) {
-//                delay(500)
-//                parentFragmentManager.beginTransaction()
-//                    .replace(
-//                        R.id.root_container,
-//                        getFragmentState(needToShowChildName, needToShowChildName)
-//                    )
-//                    .addToBackStack(null)
-//                    .commit()
-//            }
-//        } else {
-//            val current = viewModel.childs.value.find { it.name == currentFragment }
-//            val currentBackStackNumber = if (currentFragment == Nodes.root) 0 else current?.numberInBackstack
-//            var parentOfParent = needToShowChildName
-//            for (i in needToShow?.numberInBackstack!! - 1 downTo currentBackStackNumber!! + 1) {
-//                val parent = viewModel.childs.value.filter { it.numberInBackstack == i }
-//                    .find { it.childsNames.contains(parentOfParent) }
-//                parentOfParent = parent?.name!!
-//            }
-//            lifecycleScope.launch(Dispatchers.Main) {
-//                delay(500)
-//                parentFragmentManager.beginTransaction()
-//                    .replace(
-//                        R.id.root_container,
-//                        getFragmentState(parentOfParent, needToShowChildName)
-//                    )
-//                    .addToBackStack(null)
-//                    .commit()
-//            }
-//        }
     }
 
     private fun getFragmentState(name: String, needToShowChildName: String) =
