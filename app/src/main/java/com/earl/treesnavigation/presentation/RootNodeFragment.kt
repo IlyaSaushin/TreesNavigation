@@ -25,7 +25,7 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchAllONodesFromDb()
+        viewModel.fetchAllNodesFromDb()
         initRecyclerAdapter()
         binding.addChild.setOnClickListener {
             addChild(Nodes.root)

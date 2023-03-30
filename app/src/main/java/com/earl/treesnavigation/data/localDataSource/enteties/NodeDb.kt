@@ -11,9 +11,9 @@ data class NodeDb(
     @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "level") val level: Int,
     @ColumnInfo(name = "parent") val parent: String,
-    @ColumnInfo(name = "childsNames") val childsNames: List<String>,
+    @ColumnInfo(name = "childsNames") val childsNames: List<String>?,
     @ColumnInfo(name = "color") val color: Int
 ) {
     fun <T> map(mapper: NodeDbToMainMapper<T>) =
-        mapper.map(name, level, parent, childsNames.toMutableList(), color)
+        mapper.map(name, level, parent, childsNames?.toMutableList() ?: mutableListOf(), color)
 }

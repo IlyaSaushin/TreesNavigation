@@ -26,11 +26,31 @@ interface NodesDao {
 
     @Transaction
     suspend fun addNewChildForNode(nodeName: String, newChildNodeName: String) {
-        val oldNodeChildList = fetchNodeByName(nodeName).childsNames
+        val oldNodeChildList = fetchNodeByName(nodeName).childsNames ?: listOf()
         val newNodeChildsList = mutableListOf<String>().apply {
             addAll(oldNodeChildList)
             add(newChildNodeName)
         }
         updateNodeChildsList(nodeName, newNodeChildsList)
     }
- }
+
+    @Transaction
+    suspend fun deleteNodeAndItsChildFromDb(nodeName: String) {
+        val node: NodeDb? = fetchNodeByName(nodeName)
+        if (node != null) {
+            val childsList = node.childsNames ?: emptyList()
+            deleteNode(nodeName)
+            childsList.forEach { childNodeName ->
+                val node: NodeDb? = fetchNodeByName(childNodeName)
+                if (node != null) {
+                    if (node.childsNames?.isNotEmpty() == true) {
+                        deleteNodeAndItsChildFromDb(childNodeName)
+                        deleteNode(nodeName)
+                    } else {
+                        deleteNode(childNodeName)
+                    }
+                }
+            }
+        }
+    }
+}
