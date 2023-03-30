@@ -1,5 +1,6 @@
 package com.earl.treesnavigation.domain.models
 
+import com.earl.treesnavigation.domain.mappers.ChildNodeToDbMapper
 import com.earl.treesnavigation.presentation.utils.Same
 
 data class ChildNode(
@@ -10,4 +11,7 @@ data class ChildNode(
     val color: Int
 ) : Same<ChildNode> {
     override fun same(value: ChildNode) = value == this
+
+    fun <T> mapToDb(mapper: ChildNodeToDbMapper<T>) =
+        mapper.map(name, level, parent, childsNames, color)
 }

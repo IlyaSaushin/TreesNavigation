@@ -10,7 +10,8 @@ import com.earl.treesnavigation.databinding.ChildRecyclerItemBinding
 import com.earl.treesnavigation.domain.models.ChildNode
 
 interface OnChildClickListener {
-    fun onChildClick(childNode: ChildNode)
+    fun onChildNavigateClick(childNode: ChildNode)
+    fun onChildRemoveClick(childName: ChildNode)
 }
 
 class ChildsRecyclerViewAdapter(
@@ -32,7 +33,10 @@ class ChildsRecyclerViewAdapter(
             binding.childName.text = String.format(context.getString(R.string.child_name), item.name)
             binding.numberInBackstack.text = String.format(context.getString(R.string.number_in_backstack_s), item.level)
             binding.navigate.setOnClickListener {
-                clickListener.onChildClick(item)
+                clickListener.onChildNavigateClick(item)
+            }
+            binding.remvoeBtn.setOnClickListener {
+                clickListener.onChildRemoveClick(item)
             }
         }
     }

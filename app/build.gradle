@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -39,6 +41,8 @@ dependencies {
 
     def nav_version = "2.5.3"
     def fragment_version = "1.5.6"
+    def dagger_hilt = "2.44"
+    def room = "2.4.3"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -54,4 +58,15 @@ dependencies {
 
     // Fragments
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    // Dagger - Hilt
+    implementation("com.google.dagger:hilt-android:$dagger_hilt")
+    kapt("com.google.dagger:hilt-android-compiler:$dagger_hilt")
+
+    // Room components
+    implementation "androidx.room:room-runtime:$room"
+    kapt "androidx.room:room-compiler:$room"
+    implementation "androidx.room:room-ktx:$room"
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
 }
