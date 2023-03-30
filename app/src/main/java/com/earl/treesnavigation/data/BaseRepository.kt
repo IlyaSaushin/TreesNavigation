@@ -22,7 +22,7 @@ class BaseRepository @Inject constructor(
         nodesDao.fetchAllNodes().map { it.map(nodeDbToMainMapper) }
 
     override suspend fun deleteNodeFromLocalDb(nodeName: String) {
-        nodesDao.deleteNode(nodeName)
+        nodesDao.deleteNodeAndItsChildFromDb(nodeName)
     }
 
     override suspend fun updateChildsListForNode(nodeParent: String, nodeChild: String) {

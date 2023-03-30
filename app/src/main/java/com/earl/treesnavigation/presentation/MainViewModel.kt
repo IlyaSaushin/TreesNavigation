@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(
     private val _childs: MutableStateFlow<List<ChildNode>> = MutableStateFlow(emptyList())
     val childs : StateFlow<List<ChildNode>> = _childs.asStateFlow()
 
-    fun fetchAllONodesFromDb() {
+    fun fetchAllNodesFromDb() {
         viewModelScope.launch(Dispatchers.IO) {
             _childs.value = interactor.fetchAllNodesFromLocalDb()
         }
@@ -40,7 +40,17 @@ class MainViewModel @Inject constructor(
     }
 
     fun removeChild(child: ChildNode) {
+        val childsList = _childs.value.filter { it.parent == child.name }
         _childs.value -= child
+        childsList.forEach { childNode ->
+            if (childNode.childsNames.isNotEmpty()) {
+                val childs = _childs.value.filter { it.parent == childNode.name }
+                _childs.value -= childNode
+                childs.forEach { removeChild(childNode) }
+            } else {
+                _childs.value -= childNode
+            }
+        }
         viewModelScope.launch(Dispatchers.IO) {
             interactor.deleteNodeFromLocalDb(child.name)
         }
