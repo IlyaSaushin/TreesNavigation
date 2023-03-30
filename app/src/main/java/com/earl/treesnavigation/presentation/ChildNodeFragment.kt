@@ -12,9 +12,11 @@ import com.earl.treesnavigation.presentation.utils.BaseFragment
 import com.earl.treesnavigation.presentation.utils.ChildsRecyclerViewAdapter
 import com.earl.treesnavigation.presentation.utils.Nodes
 import com.earl.treesnavigation.presentation.utils.OnChildClickListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickListener {
 
     override fun viewBinding(inflater: LayoutInflater, container: ViewGroup?) =
@@ -51,8 +53,12 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
         }.launchIn(lifecycleScope)
     }
 
-    override fun onChildClick(childNode: ChildNode) {
+    override fun onChildNavigateClick(childNode: ChildNode) {
         navigate(childNode.name, getNodeName())
+    }
+
+    override fun onChildRemoveClick(childName: ChildNode) {
+        viewModel.removeChild(childName)
     }
 
     private fun getNodeName() = arguments?.getString(Nodes.nodeName) ?: ""

@@ -11,9 +11,11 @@ import com.earl.treesnavigation.presentation.utils.BaseFragment
 import com.earl.treesnavigation.presentation.utils.ChildsRecyclerViewAdapter
 import com.earl.treesnavigation.presentation.utils.Nodes
 import com.earl.treesnavigation.presentation.utils.OnChildClickListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickListener {
 
     override fun viewBinding(
@@ -23,6 +25,7 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.fetchAllONodesFromDb()
         initRecyclerAdapter()
         binding.addChild.setOnClickListener {
             addChild(Nodes.root)
@@ -38,8 +41,12 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
         }.launchIn(lifecycleScope)
     }
 
-    override fun onChildClick(childNode: ChildNode) {
+    override fun onChildNavigateClick(childNode: ChildNode) {
         navigate(childNode.name, getNodeName())
+    }
+
+    override fun onChildRemoveClick(childName: ChildNode) {
+        viewModel.removeChild(childName)
     }
 
     private fun getNodeName() = arguments?.getString(Nodes.nodeName) ?: ""

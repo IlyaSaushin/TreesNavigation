@@ -34,11 +34,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/navigate"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textColor="@color/design_default_color_primary"
         app:layout_constraintTop_toBottomOf="@id/number_in_backstack"
         app:layout_constraintStart_toStartOf="@id/child_name"
         android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/remvoe_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remove"
+        android:textSize="20sp"
+        android:textColor="@color/red"
+        app:layout_constraintTop_toTopOf="@id/navigate"
+        app:layout_constraintBottom_toBottomOf="@id/navigate"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="30dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
