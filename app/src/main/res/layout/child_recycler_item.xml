@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
+    android:id="@+id/root_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     app:cardCornerRadius="15dp"
-    android:layout_margin="10dp"
+    android:layout_margin="5dp"
     android:elevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp">
@@ -24,6 +26,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
+            android:background="@drawable/node_titles_background"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="4dp"
             />
 
         <TextView
@@ -36,6 +41,9 @@
             app:layout_constraintTop_toBottomOf="@id/child_name"
             app:layout_constraintStart_toStartOf="@id/child_name"
             android:layout_marginTop="10dp"
+            android:background="@drawable/node_titles_background"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="4dp"
             />
 
         <TextView
@@ -48,6 +56,9 @@
             app:layout_constraintTop_toBottomOf="@id/number_in_backstack"
             app:layout_constraintStart_toStartOf="@id/child_name"
             android:layout_marginTop="10dp"
+            android:background="@drawable/node_titles_background"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="4dp"
             />
 
         <TextView
@@ -59,8 +70,44 @@
             android:textColor="@color/red"
             app:layout_constraintTop_toTopOf="@id/navigate"
             app:layout_constraintBottom_toBottomOf="@id/navigate"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="30dp"
+            app:layout_constraintStart_toEndOf="@id/navigate"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/node_titles_background"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="4dp"
+            />
+
+        <TextView
+            android:id="@+id/show_childs_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_childs"
+            android:textSize="18sp"
+            android:textColor="@color/green"
+            app:layout_constraintTop_toTopOf="@id/navigate"
+            app:layout_constraintBottom_toBottomOf="@id/navigate"
+            app:layout_constraintStart_toEndOf="@id/remvoe_btn"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/node_titles_background"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="4dp"
+            />
+
+        <TextView
+            android:id="@+id/hide_childs_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hide_childs"
+            android:textSize="18sp"
+            android:textColor="@color/green"
+            app:layout_constraintTop_toTopOf="@id/navigate"
+            app:layout_constraintBottom_toBottomOf="@id/navigate"
+            app:layout_constraintStart_toEndOf="@id/remvoe_btn"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/node_titles_background"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="4dp"
+            android:visibility="gone"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

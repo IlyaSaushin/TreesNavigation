@@ -49,7 +49,6 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
         binding.childsRecycler.adapter = adapter
         viewModel.childs.onEach { list ->
             adapter.submitList(list.filter { it.parent == nodeName })
-//            adapter.submitList(list)
         }.launchIn(lifecycleScope)
     }
 
@@ -59,6 +58,15 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
 
     override fun onChildRemoveClick(childName: ChildNode) {
         viewModel.removeChild(childName)
+    }
+
+    override fun onShowChildsBtnClick(childNode: ChildNode, newList: (List<ChildNode>) -> Unit) {
+        val list = viewModel.childs.value.filter { it.parent == childNode.name }
+        newList(list)
+    }
+
+    override fun onHideChildsBtnClick(childNode: ChildNode, list: (List<ChildNode>) -> Unit) {
+
     }
 
     private fun getNodeName() = arguments?.getString(Nodes.nodeName) ?: ""

@@ -9,4 +9,7 @@
     <string name="return_to_root">Return to Root</string>
     <string name="remove"><u>Remove</u></string>
     <string name="level_s">Level: %s</string>
+    <string name="show_childs"><u>Show childs</u></string>
+    <string name="hide_childs"><u>Hide childs</u></string>
+    <string name="level_0">Level: 0</string>
 </resources>

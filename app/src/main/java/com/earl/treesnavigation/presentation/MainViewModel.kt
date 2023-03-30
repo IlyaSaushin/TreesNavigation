@@ -20,6 +20,8 @@ class MainViewModel @Inject constructor(
     private val _childs: MutableStateFlow<List<ChildNode>> = MutableStateFlow(emptyList())
     val childs : StateFlow<List<ChildNode>> = _childs.asStateFlow()
 
+    private var childsListForNode = mutableListOf<ChildNode>()
+
     fun fetchAllNodesFromDb() {
         viewModelScope.launch(Dispatchers.IO) {
             _childs.value = interactor.fetchAllNodesFromLocalDb()
@@ -36,6 +38,20 @@ class MainViewModel @Inject constructor(
     fun addChildForNodeInDb(parent: String, child: String) {
         viewModelScope.launch(Dispatchers.IO) {
             interactor.updateChildsListForNode(parent, child)
+        }
+    }
+
+    fun findAllChildsOfNode(node: ChildNode, callback: (List<ChildNode>) -> Unit) {
+        val childsList = _childs.value.filter { it.parent == node.name }
+        childsList.forEach { childNode ->
+            if (childNode.childsNames.isNotEmpty()) {
+                val childs = _childs.value.filter { it.parent == childNode.name }
+                childsListForNode += childNode
+                childs.forEach { findAllChildsOfNode(childNode, callback) }
+            } else {
+                childsListForNode += childNode
+                callback(childsListForNode.toSet().toList())
+            }
         }
     }
 
