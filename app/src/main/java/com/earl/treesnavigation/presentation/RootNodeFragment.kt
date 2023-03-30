@@ -36,8 +36,8 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
         val adapter = ChildsRecyclerViewAdapter(this)
         binding.childsRecycler.adapter = adapter
         viewModel.childs.onEach { list ->
-//            adapter.submitList(list.filter { it.parent == Nodes.root })
-            adapter.submitList(list)
+            adapter.submitList(list.filter { it.parent == Nodes.root })
+//            adapter.submitList(list)
         }.launchIn(lifecycleScope)
     }
 

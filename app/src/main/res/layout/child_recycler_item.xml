@@ -1,57 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingVertical="10dp">
+    android:background="@color/white"
+    app:cardCornerRadius="15dp"
+    android:layout_margin="10dp"
+    android:elevation="8dp">
 
-    <TextView
-        android:id="@+id/child_name"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/child_name"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="20dp"
-        />
+        android:paddingVertical="10dp">
 
-    <TextView
-        android:id="@+id/number_in_backstack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/number_in_backstack_s"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/child_name"
-        app:layout_constraintStart_toStartOf="@id/child_name"
-        android:layout_marginTop="10dp"
-        />
+        <TextView
+            android:id="@+id/child_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/child_name"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            />
 
-    <TextView
-        android:id="@+id/navigate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/navigate"
-        android:textSize="20sp"
-        android:textColor="@color/design_default_color_primary"
-        app:layout_constraintTop_toBottomOf="@id/number_in_backstack"
-        app:layout_constraintStart_toStartOf="@id/child_name"
-        android:layout_marginTop="10dp"
-        />
+        <TextView
+            android:id="@+id/number_in_backstack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/number_in_backstack_s"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/child_name"
+            app:layout_constraintStart_toStartOf="@id/child_name"
+            android:layout_marginTop="10dp"
+            />
 
-    <TextView
-        android:id="@+id/remvoe_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/remove"
-        android:textSize="20sp"
-        android:textColor="@color/red"
-        app:layout_constraintTop_toTopOf="@id/navigate"
-        app:layout_constraintBottom_toBottomOf="@id/navigate"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="30dp"
-        />
+        <TextView
+            android:id="@+id/navigate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/navigate"
+            android:textSize="20sp"
+            android:textColor="@color/design_default_color_primary"
+            app:layout_constraintTop_toBottomOf="@id/number_in_backstack"
+            app:layout_constraintStart_toStartOf="@id/child_name"
+            android:layout_marginTop="10dp"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/remvoe_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remove"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            app:layout_constraintTop_toTopOf="@id/navigate"
+            app:layout_constraintBottom_toBottomOf="@id/navigate"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="30dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

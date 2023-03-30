@@ -8,4 +8,5 @@
     <string name="number_in_backstack_s">Level: %s</string>
     <string name="return_to_root">Return to Root</string>
     <string name="remove"><u>Remove</u></string>
+    <string name="level_s">Level: %s</string>
 </resources>

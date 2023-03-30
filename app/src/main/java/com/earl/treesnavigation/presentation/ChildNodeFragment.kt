@@ -25,8 +25,8 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val nodeName = getNodeName()
-        initRecyclerAdapter()
-        binding.numberInBackstack.text = (parentFragmentManager.backStackEntryCount - 1).toString()
+        initRecyclerAdapter(nodeName)
+        binding.numberInBackstack.text = String.format(requireContext().getString(R.string.level_s), parentFragmentManager.backStackEntryCount - 1)
         binding.nodeName.text = String.format(requireContext().getString(R.string.child_name), nodeName)
         binding.rootLayout.setBackgroundColor(viewModel.childs.value.find { it.name == nodeName }?.color!!)
         binding.addChild.setOnClickListener {
@@ -44,12 +44,12 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
         }
     }
 
-    private fun initRecyclerAdapter() {
+    private fun initRecyclerAdapter(nodeName: String) {
         val adapter = ChildsRecyclerViewAdapter(this)
         binding.childsRecycler.adapter = adapter
         viewModel.childs.onEach { list ->
-//            adapter.submitList(list.filter { it.parent == nodeName })
-            adapter.submitList(list)
+            adapter.submitList(list.filter { it.parent == nodeName })
+//            adapter.submitList(list)
         }.launchIn(lifecycleScope)
     }
 
