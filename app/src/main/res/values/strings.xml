@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">TreesNavigation</string>
+    <string name="this_is_a_root_node">This is a root node</string>
+    <string name="child_node">Child node name: %s</string>
+    <string name="add_child">Add child</string>
+    <string name="child_name">Child node name: %s</string>
+    <string name="navigate"><u>Navigate</u></string>
+    <string name="number_in_backstack_s">Level: %s</string>
+    <string name="return_to_root">Return to Root</string>
+    <string name="remove"><u>Remove</u></string>
+    <string name="level_s">Level: %s</string>
+    <string name="show_childs"><u>Show childs</u></string>
+    <string name="hide_childs"><u>Hide childs</u></string>
+    <string name="level_0">Level: 0</string>
+    <string name="back">popBackStack</string>
 </resources>
