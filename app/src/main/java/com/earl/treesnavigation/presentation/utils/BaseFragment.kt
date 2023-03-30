@@ -2,6 +2,7 @@ package com.earl.treesnavigation.presentation.utils
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,7 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
                 val parent = viewModel.childs.value.filter { it.level == i }
                     .find { it.childsNames.contains(parentOfParent) }
                 parentOfParent = parent?.name!!
+                Log.d("tag", "navigate: ${viewModel.childs.value} ")
             }
             lifecycleScope.launch(Dispatchers.Main) {
                 delay(500)
@@ -125,6 +127,9 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
             this.name = NodeNameGenerator.generateName(this.hashCode())
         }
         viewModel.childs.value.find { it.name == parent }?.childsNames?.add(newNode.name)
+        if (parent != Nodes.root) {
+            viewModel.addChildForNodeInDb(parent, newNode.name)
+        }
         viewModel.addChild(newNode)
     }
 

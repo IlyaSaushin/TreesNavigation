@@ -11,6 +11,7 @@ interface Interactor {
 
     suspend fun deleteNodeFromLocalDb(nodeName: String)
 
+    suspend fun updateChildsListForNode(nodeParent: String, nodeChild: String)
 
     class Base @Inject constructor(
         private val repository: Repository
@@ -25,6 +26,10 @@ interface Interactor {
 
         override suspend fun deleteNodeFromLocalDb(nodeName: String) {
             repository.deleteNodeFromLocalDb(nodeName)
+        }
+
+        override suspend fun updateChildsListForNode(nodeParent: String, nodeChild: String) {
+            repository.updateChildsListForNode(nodeParent, nodeChild)
         }
     }
 }

@@ -24,4 +24,8 @@ class BaseRepository @Inject constructor(
     override suspend fun deleteNodeFromLocalDb(nodeName: String) {
         nodesDao.deleteNode(nodeName)
     }
+
+    override suspend fun updateChildsListForNode(nodeParent: String, nodeChild: String) {
+        nodesDao.addNewChildForNode(nodeParent, nodeChild)
+    }
 }

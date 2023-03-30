@@ -33,6 +33,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun addChildForNodeInDb(parent: String, child: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            interactor.updateChildsListForNode(parent, child)
+        }
+    }
+
     fun removeChild(child: ChildNode) {
         _childs.value -= child
         viewModelScope.launch(Dispatchers.IO) {

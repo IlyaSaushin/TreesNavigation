@@ -9,4 +9,6 @@ interface Repository {
     suspend fun fetchAllNodesFromLocalDb() : List<ChildNode>
 
     suspend fun deleteNodeFromLocalDb(nodeName: String)
+
+    suspend fun updateChildsListForNode(nodeParent: String, nodeChild: String)
 }
