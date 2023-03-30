@@ -12,4 +12,5 @@
     <string name="show_childs"><u>Show childs</u></string>
     <string name="hide_childs"><u>Hide childs</u></string>
     <string name="level_0">Level: 0</string>
+    <string name="back">popBackStack</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.earl.treesnavigation.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,10 +30,10 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
         binding.nodeName.text = String.format(requireContext().getString(R.string.child_name), nodeName)
         binding.rootLayout.setBackgroundColor(viewModel.childs.value.find { it.name == nodeName }?.color!!)
         binding.addChild.setOnClickListener {
-            addChild(nodeName)
+            addChildNode(nodeName)
         }
         binding.returnToRootBtn.setOnClickListener {
-            returnToRoot(nodeName)
+            popBackstack(nodeName)
         }
     }
 
