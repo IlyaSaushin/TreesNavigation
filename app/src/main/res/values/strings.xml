@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TreesNavigation</string>
+    <string name="this_is_a_root_node">This is a root node</string>
+    <string name="child_node">Child node name: %s</string>
+    <string name="add_child">Add child</string>
+    <string name="child_name">Child name: %s</string>
+    <string name="navigate"><u>Navigate</u></string>
+    <string name="number_in_backstack_s">Level: %s</string>
+    <string name="return_to_root">Return to Root</string>
 </resources>
