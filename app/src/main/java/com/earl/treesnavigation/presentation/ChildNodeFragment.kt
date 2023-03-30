@@ -1,6 +1,7 @@
 package com.earl.treesnavigation.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,14 +27,14 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
         super.onViewCreated(view, savedInstanceState)
         val nodeName = getNodeName()
         initRecyclerAdapter(nodeName)
-        binding.numberInBackstack.text = String.format(requireContext().getString(R.string.level_s), parentFragmentManager.backStackEntryCount - 1)
+        binding.numberInBackstack.text = String.format(requireContext().getString(R.string.level_s), viewModel.childs.value.find { it.name == nodeName }?.level)
         binding.nodeName.text = String.format(requireContext().getString(R.string.child_name), nodeName)
         binding.rootLayout.setBackgroundColor(viewModel.childs.value.find { it.name == nodeName }?.color!!)
         binding.addChild.setOnClickListener {
             addChild(nodeName)
         }
         binding.returnToRootBtn.setOnClickListener {
-            navigate(Nodes.root, nodeName)
+            returnToRoot(nodeName)
         }
     }
 
@@ -42,6 +43,7 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
         if (getNodeName() != getNeedToShowFragmentName()) {
             navigate(getNeedToShowFragmentName(), getNodeName())
         }
+        updateCurrentNodeParent(getNodeName())
     }
 
     private fun initRecyclerAdapter(nodeName: String) {
@@ -66,7 +68,9 @@ class ChildNodeFragment : BaseFragment<FragmentChildBinding>(), OnChildClickList
     }
 
     override fun onHideChildsBtnClick(childNode: ChildNode, list: (List<ChildNode>) -> Unit) {
-
+        viewModel.findAllChildsOfNode(childNode) { readyList ->
+            list(readyList)
+        }
     }
 
     private fun getNodeName() = arguments?.getString(Nodes.nodeName) ?: ""

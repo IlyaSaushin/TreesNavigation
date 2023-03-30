@@ -6,20 +6,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
-import com.earl.treesnavigation.presentation.ChildNodeFragment
-import com.earl.treesnavigation.presentation.MainViewModel
 import com.earl.treesnavigation.R
 import com.earl.treesnavigation.domain.models.ChildNode
+import com.earl.treesnavigation.presentation.ChildNodeFragment
+import com.earl.treesnavigation.presentation.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 abstract class BaseFragment<VB: ViewBinding> : Fragment() {
+
+    companion object {
+        private var currentNodeParent = ""
+    }
 
     private var _binding: VB? = null
     protected val binding get() = _binding!!
@@ -32,6 +37,7 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        backPressedCallback()
         _binding = viewBinding(inflater, container)
         return binding.root
     }
@@ -43,6 +49,8 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
 
     protected fun navigate(needToShowChildName: String, currentFragment: String) {
         val needToShow = viewModel.childs.value.find { it.name == needToShowChildName }
+        val current = viewModel.childs.value.find { it.name == currentFragment }
+        currentNodeParent = needToShow?.parent ?: ""
         if (needToShow?.parent == currentFragment) {
             lifecycleScope.launch(Dispatchers.Main) {
                 delay(300)
@@ -50,13 +58,18 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
                     .setCustomAnimations(R.anim.slide_in, R.anim.slide_down)
                     .replace(
                         R.id.root_container,
-                        getFragmentState(needToShowChildName, needToShowChildName)
+                        getFragmentState(needToShowChildName, needToShowChildName).apply {
+                            arguments = Bundle().apply {
+                                putString(Nodes.nodeName, needToShowChildName)
+                                putString(Nodes.needToShow, needToShowChildName)
+                            }
+                        },
+                        needToShowChildName
                     )
                     .addToBackStack(null)
                     .commit()
             }
         } else {
-            val current = viewModel.childs.value.find { it.name == currentFragment }
             val currentBackStackNumber = if (currentFragment == Nodes.root) 0 else current?.level
             var parentOfParent = needToShowChildName
             for (i in needToShow?.level!! - 1 downTo currentBackStackNumber!! + 1) {
@@ -70,7 +83,13 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
                     .setCustomAnimations(R.anim.slide_in, R.anim.slide_down)
                     .replace(
                         R.id.root_container,
-                        getFragmentState(parentOfParent, needToShowChildName)
+                        getFragmentState(parentOfParent, needToShowChildName).apply {
+                            arguments = Bundle().apply {
+                                putString(Nodes.nodeName, parentOfParent)
+                                putString(Nodes.needToShow, needToShowChildName)
+                            }
+                        },
+                        parentOfParent
                     )
                     .addToBackStack(null)
                     .commit()
@@ -78,8 +97,29 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         }
     }
 
-    protected fun returnToRoot(currentFragment: String) {
-        val currentNodeLevel = viewModel.childs.value.find { it.name == currentFragment }?.level
+    protected fun returnToRoot(currentNode: String) {
+        val currentNodeParent = viewModel.childs.value.find { it.name == currentNode }?.parent
+        if (currentNodeParent != null) {
+            val fragment = getFragmentState(currentNodeParent, currentNodeParent)
+            fragment.apply {
+                arguments = Bundle().apply {
+                    putString(Nodes.nodeName, currentNodeParent)
+                    putString(Nodes.needToShow, currentNodeParent)
+                }
+            }
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(300)
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_back_down, R.anim.slide_back_in)
+                    .replace(
+                        R.id.root_container,
+                        fragment,
+                        currentNodeParent
+                    )
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
     }
 
     private fun getFragmentState(name: String, needToShowChildName: String) =
@@ -100,6 +140,39 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
             viewModel.addChildForNodeInDb(parent, newNode.name)
         }
         viewModel.addChild(newNode)
+    }
+
+    protected fun updateCurrentNodeParent(currentNode: String) {
+        currentNodeParent = viewModel.childs.value.find { it.name == currentNode }?.parent ?: ""
+    }
+
+    private fun backPressedCallback() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (currentNodeParent != "") {
+                    val fragment = getFragmentState(currentNodeParent, currentNodeParent)
+                    fragment.apply {
+                        arguments = Bundle().apply {
+                            putString(Nodes.nodeName, currentNodeParent)
+                            putString(Nodes.needToShow, currentNodeParent)
+                        }
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            delay(300)
+                            parentFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_back_down, R.anim.slide_back_in)
+                                .replace(
+                                    R.id.root_container,
+                                    fragment,
+                                    currentNodeParent
+                                )
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                    }
+                }
+            }
+        }
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
     }
 
     override fun onDestroyView() {

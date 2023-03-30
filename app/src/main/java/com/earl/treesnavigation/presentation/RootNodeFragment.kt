@@ -42,7 +42,7 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
     }
 
     override fun onChildNavigateClick(childNode: ChildNode) {
-        navigate(childNode.name, getNodeName())
+        navigate(childNode.name, Nodes.root)
     }
 
     override fun onChildRemoveClick(childName: ChildNode) {
@@ -59,8 +59,6 @@ class RootNodeFragment : BaseFragment<FragmentRootNodeBinding>(), OnChildClickLi
             list(readyList)
         }
     }
-
-    private fun getNodeName() = arguments?.getString(Nodes.nodeName) ?: ""
 
     companion object {
         fun newInstance(name: String) = RootNodeFragment().apply {
